@@ -512,6 +512,22 @@ namespace CastleGrimtol.Project
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.Black;
         }
+        public void cheat()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.DarkRed;
+            #region 
+            Console.Write(@"
+---------------------------------------------------------------------------
+| - Go south and take treasure.                                            |
+| - Go(N,N,E,E,S)                                                          |
+| - use escape command with treasure to win                                |
+---------------------------------------------------------------------------
+            ");
+            #endregion
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.BackgroundColor = ConsoleColor.Black;
+        }
 
         public Game()
         {

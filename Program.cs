@@ -30,7 +30,7 @@ namespace CastleGrimtol
                 System.Console.ReadLine();
 
               
-                System.Console.WriteLine("prestoryhere");
+                System.Console.WriteLine("You have successfully infultrated the Grimtol Castle. You must find the treasure and escape!");
 
                 System.Console.WriteLine("Type: play or q");
                 var input2 = game.handleInput().ToLower();
