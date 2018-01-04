@@ -43,7 +43,7 @@ namespace CastleGrimtol.Project
                 Console.ForegroundColor = ConsoleColor.White;
                 System.Console.WriteLine(" " + CurrentRoom.Description);
                 Console.ForegroundColor = ConsoleColor.DarkMagenta;
-                System.Console.Write(" Directions/");
+                System.Console.Write("Available directions: ");
                 Console.ForegroundColor = ConsoleColor.White;
                 foreach (var exit in CurrentRoom.Exits)
                 {
@@ -65,23 +65,25 @@ namespace CastleGrimtol.Project
                 switch (input.ToLower())
                 {
 
-                    // case "unlock":
+                    case "use":
+                        System.Console.WriteLine("What would you like to use?");
+                        var Item8 = handleInput();
+                        // var Item9 = CurrentPlayer.Inventory.Find(item => item.Name == Item8);
+                        // System.Console.WriteLine(Item9);
+                        //need to validate user input for use!!!!!!!!!
 
-                      
+                        if (validate(Item8) == true)
+                        {
+                            UseItem(Item8);
+                            System.Console.ReadLine();
+                        }
+                        else
+                        {
+                            System.Console.WriteLine("Invalid Input");
+                        }
 
-                    //         if (CurrentPlayer.Inventory.Find(item => item.Name == "lockpick") != null)
-                    //         {
-                    //            foreach (var exit in CurrentRoom.Exits)
-                    //            {
-                    //                locked = false;
-                    //            }
-                    //         }
-                    //         else
-                    //         {
-                    //             continue;
-                    //         }
-                        
-                    //     else { continue; }
+                        continue;
+
 
                     case "help":
                         help();
@@ -129,15 +131,42 @@ namespace CastleGrimtol.Project
                         Console.ForegroundColor = ConsoleColor.White;
                         foreach (var item in CurrentPlayer.Inventory)
                         {
-                            System.Console.Write(item.Name);
+                            System.Console.Write(item.Name + ", ");
+                        }
+                        if (input6 == "treasure")
+                        {
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            System.Console.WriteLine(@" 
+                            
+
+                            _.--.
+                        _.-'_:-'||
+                    _.-'_.-::::'||
+               _.-:'_.-::::::'  ||
+             .'`-.-:::::::'     ||
+            /.'`;|:::::::'      ||_
+           ||   ||::::::'     _.;._'-._
+           ||   ||:::::'  _.-!oo @.!-._'-.
+           \'.  ||:::::.-!()oo @!()@.-'_.|
+            '.'-;|:.-'.&$@.& ()$%-'o.'\U||
+              `>'-.!@%()@'@_%-'_.-o _.|'||
+               ||-._'-.@.-'_.-' _.-o  |'||
+               ||=[ '-._.-\U/.-'    o |'||
+               || '-.]=|| |'|      o  |'||
+               ||      || |'|        _| ';
+               ||      || |'|    _.-'_.-'
+               |'-._   || |'|_.-'_.-'
+            jgs '-._'-.|| |' `_.-'
+                    '-.||_/.-' ");
                         }
                         System.Console.WriteLine();
+                        Console.ForegroundColor = ConsoleColor.White;
                         System.Console.WriteLine(" Enter to continue");
                         System.Console.ReadLine();
                         continue;
 
 
-                    
+
                     case "escape":
 
                         if (CurrentRoom.Name == "6")
@@ -176,6 +205,12 @@ namespace CastleGrimtol.Project
                         System.Console.WriteLine(" Enter to continue");
                         System.Console.ReadLine();
                         continue;
+                    case "cheat":
+                        Console.WriteLine("GODtoggle(notworking)");
+                        CurrentPlayer.godMode();
+                        Console.ReadLine();
+                        continue;
+
                     case "q":
                         Console.WriteLine("Excellent!");
                         System.Environment.Exit(0);
@@ -386,51 +421,103 @@ namespace CastleGrimtol.Project
             }
         }
 
+        private bool validate(string itemName)
+        {
+            var Item = CurrentPlayer.Inventory.Find(item => item.Name == itemName);
+            if (Item != null)
+            {
+                return true;
+            }
+            return false;
+        }
 
         public void go(string direction)
         {
-            if (CurrentRoom.Locked.Equals(false))
+
+
+            if (direction == "n")
             {
 
-
-                if (direction == "n")
+                var newRoom = CurrentRoom.Exits["north"];
+                if (newRoom.Locked.Equals(true) && CurrentPlayer.Godmode.Equals(false))
                 {
-                    var newRoom = CurrentRoom.Exits["north"];
+                    System.Console.WriteLine("You try to open the door..");
+                    System.Threading.Thread.Sleep(3000);
+                    System.Console.WriteLine("IT IS LOCKED!");
+
+                    System.Console.ReadLine();
+                    return;
+                }
+                else if (CurrentPlayer.Godmode.Equals(true))
+                {
                     CurrentRoom = newRoom;
                     System.Console.WriteLine(CurrentRoom);
                     return;
                 }
 
-                else if (direction == "s")
-                {
-                    var newRoom = CurrentRoom.Exits["south"];
-                    CurrentRoom = newRoom;
-                    System.Console.WriteLine(CurrentRoom);
-                    return;
-                }
+                CurrentRoom = newRoom;
+                System.Console.WriteLine(CurrentRoom);
+                return;
 
-                else if (direction == "e")
-                {
-                    var newRoom = CurrentRoom.Exits["east"];
-                    CurrentRoom = newRoom;
-                    return;
-                }
-
-                else if (direction == "w")
-                {
-                    var newRoom = CurrentRoom.Exits["west"];
-                    CurrentRoom = newRoom;
-                    return;
-                }
-
-                else
-                {
-                    System.Console.WriteLine("bad input");
-                    return;
-                }
-            }else{
-                System.Console.WriteLine("IT IS LOCKED!");
             }
+
+            else if (direction == "s")
+            {
+                var newRoom = CurrentRoom.Exits["south"];
+                if (newRoom.Locked.Equals(true))
+                {
+                    System.Console.WriteLine("You try to open the door..");
+                    System.Threading.Thread.Sleep(3000);
+                    System.Console.WriteLine("IT IS LOCKED!");
+
+                    System.Console.ReadLine();
+                    return;
+                }
+
+                CurrentRoom = newRoom;
+                System.Console.WriteLine(CurrentRoom);
+                return;
+            }
+
+            else if (direction == "e")
+            {
+                var newRoom = CurrentRoom.Exits["east"];
+                if (newRoom.Locked.Equals(true))
+                {
+                    System.Console.WriteLine("You try to open the door..");
+                    System.Threading.Thread.Sleep(3000);
+                    System.Console.WriteLine("IT IS LOCKED!");
+
+                    System.Console.ReadLine();
+                    return;
+                }
+                CurrentRoom = newRoom;
+                return;
+            }
+
+            else if (direction == "w")
+            {
+                var newRoom = CurrentRoom.Exits["west"];
+                if (newRoom.Locked.Equals(true))
+                {
+                    System.Console.WriteLine("You try to open the door..");
+                    System.Threading.Thread.Sleep(3000);
+                    System.Console.WriteLine("IT IS LOCKED!");
+
+                    System.Console.ReadLine();
+                    return;
+                }
+                CurrentRoom = newRoom;
+                return;
+            }
+
+            else
+            {
+                System.Console.WriteLine("bad input");
+                return;
+            }
+
+
 
         }
         public string handleInput()
@@ -453,10 +540,16 @@ namespace CastleGrimtol.Project
         {
             var room1 = new Room("1", "A dim light courtyard with two doors.", false);
             var room2 = new Room("2", "test2yuh", false);
-            var room3 = new Room("3", "Room 3", false);
+            var room3 = new Room("3", "Room 3", true);
             var room4 = new Room("4", "Room 4", false);
             var room5 = new Room("5", "Room 5", false);
             var room6 = new Room("6", "Escape!", false);
+            var room7 = new Room("7", "room 7!", false);
+            var room8 = new Room("8", "room 8!", true);
+            room8.Exits.Add("east", room7);
+            room7.Exits.Add("west", room8);
+            room7.Exits.Add("east", room4);
+            room4.Exits.Add("west", room7);
             room4.Exits.Add("north", room1);
             room1.Exits.Add("south", room4);
             room1.Exits.Add("north", room2);
@@ -470,8 +563,10 @@ namespace CastleGrimtol.Project
             CurrentRoom = room1;
             var lockpick = new Item("lockpick", "A universal key");
             var treasure = new Item("treasure", "treasure!");
+            var key = new Item("key", "Key!");
+            room3.Items.Add(key);
             room4.Items.Add(lockpick);
-            room4.Items.Add(treasure);
+            room8.Items.Add(treasure);
 
 
 
@@ -487,10 +582,10 @@ namespace CastleGrimtol.Project
                 CurrentRoom.Items.Remove(Item);
             }
         }
-        public void UseItem(string itemName)
-        {
-            
-        }
+        // public void UseItem(string itemName)
+        // {
+
+        // }
         public void help()
         {
             Console.ForegroundColor = ConsoleColor.White;
@@ -529,6 +624,172 @@ namespace CastleGrimtol.Project
             Console.BackgroundColor = ConsoleColor.Black;
         }
 
+        public void UseItem(string itemName)
+        {
+            var Item = CurrentPlayer.Inventory.Find(item => item.Name == itemName);
+            if (Item.Name == "key")
+            {
+                System.Console.Write("Which Door?"); var input10 = handleInput();
+                switch (input10.ToLower())
+                {
+                    case "n":
+                        if (CurrentRoom.Exits.ContainsKey("north"))
+                        {
+                            System.Console.WriteLine("Success!");
+                            var room = CurrentRoom.Exits["north"];
+                            room.Locked = false;
+                        }
+                        return;
+
+                    case "e":
+                        if (CurrentRoom.Exits.ContainsKey("east"))
+                        {
+                            System.Console.WriteLine("Success!");
+                            var room = CurrentRoom.Exits["east"];
+                            room.Locked = false;
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.ReadLine();
+
+                        }
+                        return;
+
+                    case "s":
+                        if (CurrentRoom.Exits.ContainsKey("south"))
+                        {
+                            System.Console.WriteLine("Success!");
+                            var room = CurrentRoom.Exits["south"];
+                            room.Locked = false;
+                        }
+                        return;
+
+
+                    case "w":
+                        if (CurrentRoom.Exits.ContainsKey("west"))
+                        {
+                            System.Console.WriteLine("Success!");
+                            var room = CurrentRoom.Exits["west"];
+                            room.Locked = false;
+                        }
+                        else
+                        {
+                            Console.Clear();
+
+                            Console.ReadLine();
+                        }
+                        return;
+                    default:
+                        System.Console.WriteLine("Unrecognized input");
+                        return;
+                }
+
+            }
+            if (Item.Name == "lockpick")
+            {
+                System.Console.Write("Which Door?"); var input10 = handleInput();
+                switch (input10.ToLower())
+                {
+                    case "n":
+                        if (CurrentRoom.Exits.ContainsKey("north"))
+                        {
+
+                            if (Picklock() == true)
+                            {
+                                System.Console.WriteLine("Success!");
+                                var room = CurrentRoom.Exits["north"];
+                                room.Locked = false;
+                            }
+
+                        }
+                        return;
+
+                    case "e":
+                        if (CurrentRoom.Exits.ContainsKey("east"))
+                        {
+
+                            if (Picklock() == true)
+                            {
+                                System.Console.WriteLine("Success!");
+                                var room = CurrentRoom.Exits["east"];
+                                room.Locked = false;
+                            }
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.ReadLine();
+
+                        }
+                        return;
+
+                    case "s":
+                        if (CurrentRoom.Exits.ContainsKey("south"))
+                        {
+                            if (Picklock() == true)
+                            {
+
+                                System.Console.WriteLine("Success!"); var room = CurrentRoom.Exits["south"];
+                                room.Locked = false;
+                            }
+                        }
+                        return;
+
+
+                    case "w":
+                        if (CurrentRoom.Exits.ContainsKey("west"))
+                        {
+                            if (Picklock() == true)
+                            {
+                                System.Console.WriteLine("Success!");
+                                var room = CurrentRoom.Exits["west"];
+                                room.Locked = false;
+                            }
+                        }
+                        else
+                        {
+                            Console.Clear();
+
+                            Console.ReadLine();
+                        }
+                        return;
+                    default:
+                        System.Console.WriteLine("Unrecognized input");
+                        return;
+                }
+            }
+        }
+
+        public bool Picklock()
+        {
+            bool outt = false;
+            bool valid = true;
+            while (valid == true)
+            {
+                Random rnd = new Random();
+                int odds = rnd.Next(1, 19);
+                System.Console.WriteLine(odds);
+                System.Console.WriteLine("Picking lock...");
+                if (odds < 2)
+                {
+                    outt = true;
+                    return outt;
+                }
+                else
+                {
+
+                    System.Threading.Thread.Sleep(2000);
+                    System.Console.WriteLine("Your attempt has failed Click enter to try again.");
+                    System.Console.ReadLine();
+
+                    continue;
+                }
+
+
+            }
+            return outt;
+        }
         public Game()
         {
 
