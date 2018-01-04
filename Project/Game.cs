@@ -769,7 +769,7 @@ namespace CastleGrimtol.Project
             {
                 Random rnd = new Random();
                 int odds = rnd.Next(1, 19);
-                System.Console.WriteLine(odds);
+                // System.Console.WriteLine(odds);
                 System.Console.WriteLine("Picking lock...");
                 if (odds < 2)
                 {
